@@ -3,7 +3,6 @@ require('./init');
 var chai = require("chai"),
     assert = chai.assert;
 
-require('../db/users').mockMethods();
 var machinist = require('../scoreMachine/machinist');
 
 

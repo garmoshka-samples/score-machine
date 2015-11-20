@@ -75,7 +75,7 @@ describe('vegetability', function() {
                 assert.equal(e.payload.scores['de'].strafe, 'vegetability');
                 assert.equal(e.payload.scores['de'].score, -12);
                 assert.equal(e.payload.scores['de'].recentScore, -5);
-                assert.equal(e.payload.scores['de'].flags[0], 'recommendManure');
+                assert.equal(e.payload.scores['de'].flags[0], 'giveRecommendations');
                 send4();
             };
 

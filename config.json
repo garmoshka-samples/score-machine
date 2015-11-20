@@ -1,0 +1,46 @@
+{
+  "patience": {
+    
+    "partners": {
+      "adequateImpatience": 10,
+      "great": 50,
+      "greatStrafe": 7,
+      "greatSilentPatienceStrafe": 3,
+      "normal": 25,
+      "normalStrafe": 3,
+      "low": 10,
+      "lowStrafe": 1
+    },
+    
+    "my": {
+      "__active": "active patience - is when we try to interact with interlocutor, but get no answer",
+      "active": {
+        "low": 10,
+        "lowStrafe": 5,
+        "normal": 50,
+        "normalStrafe": 1
+      },
+      "__silent": "silent - is we simply wait for interaction from his side. Is worse, than active patience.",
+      "silent": {
+        "low": 10,
+        "lowStrafe": 10,
+        "normal": 50,
+        "normalStrafe": 6,
+        "greatStrafe": 3
+      }
+    }
+    
+  },
+  
+  "vegetability": {
+    
+    "__seedPower": "seedPower - defines amount of message interchanges required to 'kill' the seed - after which vegetability penalizing will be deactivated",
+    "seedPower": 3,
+    "minimalLifePower": 2,
+    
+    "__initialStrafe": "Initial penalty for vegetable behaviour. Incremented for +1 after each case.",
+    "initialStrafe": 3,
+    "giveRecommendationsAfterStrafe": 4
+    
+  }
+}

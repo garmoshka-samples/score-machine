@@ -4,26 +4,39 @@ var termination = require('./termination');
 var vegetability = require('./vegetability');
 var Accumulator = require('./Accumulator');
 
+/*
+ * ChatSide - represents participant of a chat.
+ * Since user may participate several chats, he may have few ChatSide instances at a time.
+ * 
+ * Params:
+ *   idx - anonymous index of user in chat
+ *   userSession - session of user
+ *   init_score - initial score
+ *   channel - channel of a chat
+ * 
+ */
 
 function ChatSide(idx, userSession, init_score, channel) {
-    // todo: резервно копировать самые важные значения в redis
-    // и восстанавливать их при перегрузке.
-    // startTime, rows, myWorkedIncentives, acc.score, посмотреть еще.
+
     var self = this,
         closed = false,
         lastAuthor, startTime,
         rows = 0,
         hisLastMessageTime,
-        myWorkedIncentives = 0, myIncentiveValue = 0,
+        myWorkedIncentives = 0, // How many times interlocutor reacted on my messages
+        myIncentiveValue = 0, // Value of current messages, which user sent to interlocutor.
+                              // If interlocutor will react - this value will be added to my score
         acc = new Accumulator(init_score);
 
     this.hisRows = 0;
     this.myRows = 0;
 
-    var seed = new vegetability.Seed(bestrafeMich, userSession, channel, idx),
-        timer = seed.timer;
-    timer.idx = idx;
+    // When chat started - "vegetability" seed is planted
+    // so guys should talk to not let it grow
+    var seed = new vegetability.Seed(userSession, channel, bestrafeMich);
     seed.plant();
+
+    var timer = seed.timer;
 
     // External behavior events:
 
@@ -80,15 +93,12 @@ function ChatSide(idx, userSession, init_score, channel) {
         closed = true;
 
         timer.stop();
-        var strafe = termination.analyze(
+        var strafe = termination.calculateTerminationStrafe(
                 self, byPartner, getDuration(startTime), getDuration(hisLastMessageTime)
             );
 
         if (strafe > 0)
             bestrafeMich(payload, strafe, 'termination');
-
-        if (idx != 'he') // patch for external chat
-            userSession.honor.add(acc);
     };
 
     // PRIVATE:
@@ -131,15 +141,6 @@ function ChatSide(idx, userSession, init_score, channel) {
         hisLastMessageTime = t;
     };
 
-    // Utils:
-
-    this.getLog = function() {
-        return {
-            rows: rows,
-            incentives: myWorkedIncentives,
-            duration: getDuration(startTime)
-        };
-    };
 }
 
 
